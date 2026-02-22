@@ -1,0 +1,111 @@
+/* NavBar Start */
+@media (min-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    width: 88px;
+  }
+
+  .navbar a {
+    margin-left: 24px;
+    margin-bottom: 100px;
+  }
+}
+
+@media (max-width: 767.99px) {
+  .navbar {
+    flex-direction: row;
+    width: 100%;
+    background-color: white;
+  }
+
+  .navbar a {
+    margin: 24px;
+  }
+}
+/* NavBar End */
+
+/* Body Padding Start */
+@media (min-width: 768px) {
+  .bodyy {
+    padding-left: 98px;
+    padding-right: 98px;
+    padding-bottom: 98px;
+  }
+}
+
+@media (max-width: 767.99px) {
+  .bodyy {
+    padding-left: 42px;
+    padding-right: 42px;
+    padding-bottom: 90px;
+  }
+}
+/* Body Padding End */
+
+/* Text Wrap Function Start */
+.title-wrap {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.desc-wrap {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Text Wrap Function End */
+
+.accwrapper {
+  width: 400px;
+  margin: 100px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.accinner {
+  text-align: center;
+}
+
+.accform-wrapper {
+  margin-bottom: 20px;
+}
+
+.accform-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.accform-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+#accbutton {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#accbutton:hover {
+  background-color: #0056b3;
+}
+
+.accredirectlink {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+}
