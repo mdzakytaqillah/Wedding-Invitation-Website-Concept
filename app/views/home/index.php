@@ -9,6 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
       rel="stylesheet"
     />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
@@ -43,13 +44,44 @@
       .slider-wrapper { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
       .slide { min-width: 100%; display: flex; justify-content: center; padding: 0 10px; }
       /* Cards Styling */
-      .testimonial-card, .gallery-card { 
+      .testimonial-card { 
           background: white; padding: 40px; border: 1px solid rgba(197, 160, 89, 0.2); 
           text-align: center; width: 100%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
       }
-      .gallery-card { padding: 10px; cursor: pointer; transition: 0.3s; }
-      .gallery-card:hover { transform: scale(1.02); border-color: var(--gold); }
-      .gallery-image { width: 100%; height: 400px; object-fit: cover; }
+      .gallery-masonry-wrapper {
+          width: 100%;
+          display: block;
+          text-align: center; /* Membantu elemen inline-block di dalamnya ke tengah */
+      }
+      .gallery-columns {
+          display: inline-block; /* Agar lebar container mengikuti isi (fit-content) */
+          width: fit-content;
+          max-width: 100%; /* Agar tidak meluber di layar kecil */
+          margin: 0 auto; /* Memastikan posisi di tengah */
+          /* Pengaturan Kolom */
+          column-count: 2;     /* Maksimal 2 kolom */
+          column-gap: 20px;
+      }
+      .gallery-item {
+          display: block; /* Agar setiap item jadi satu kesatuan */
+          break-inside: avoid; /* Mencegah foto terpotong di antara kolom */
+          width: 100%;
+          max-width: 400px; /* Membatasi lebar maksimal foto untuk menjaga estetika */
+          margin-bottom: 20px;
+          cursor: pointer;
+          transition: transform 0.3s ease;
+      }
+      .gallery-img-natural {
+          width: 100%;
+          height: auto; /* Width dikunci, Height natural (No Crop) */
+          display: block;
+          border-radius: 4px;
+          border: 1px solid rgba(197, 160, 89, 0.2);
+          box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      }
+      .gallery-item:hover {
+          transform: scale(1.03);
+      }
       /* Text Styling */
       .quote-icon { font-size: 50px; color: var(--gold); opacity: 0.5; line-height: 1; display: block; }
       .message { font-style: italic; color: var(--stone-600); margin: 20px 0; line-height: 1.8; }
@@ -62,6 +94,11 @@
       /* Lightbox */
       #lightbox-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
       @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      /* Responsif untuk HP */
+      @media (max-width: 768px) {
+          .gallery-columns { column-count: 1; }
+          .gallery-item { max-width: 350px; }
+      }
     </style>
   </head>
   <body class="bg-stone-50 text-stone-800 overflow-x-hidden">
@@ -94,7 +131,7 @@
       style="
         background-image:
           linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-          url(&quot;https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80&quot;);
+          url(<?= $data['coverpath'] ?>);
       "
     >
       <div class="text-white w-full max-w-4xl">
@@ -151,6 +188,20 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <section id="video-story" class="py-20 bg-white" style="<?= empty($data['YTvideoID']) ? 'display: none;' : '' ?>">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto shadow-2xl rounded-2xl overflow-hidden border-8 border-white">
+                <div class="aspect-video">
+                    <iframe width="100%" height="100%" 
+                            src="https://www.youtube.com/embed/<?= $data['YTvideoID']; ?>" 
+                            title="YouTube video player" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section id="cerita" class="py-24 container mx-auto px-4" style="<?= empty($data['story'][0]['title']) ? 'display: none;' : '' ?>">
@@ -230,24 +281,50 @@
               <h2 class="font-wedding text-4xl text-gold mb-2">Our Moments</h2>
               <p class="text-stone-500 italic">Momen-momen indah kami</p>
           </div>
-          <div class="testimonial-container universal-slider">
-              <button class="nav-btn prev" onclick="plusSlides(-1, this)">&#10094;</button>
-              <button class="nav-btn next" onclick="plusSlides(1, this)">&#10095;</button>
-              <div class="slider-wrapper">
-                  <?php foreach ($data['gallery'] as $img): ?>
-                      <div class="slide">
-                          <div class="gallery-card" onclick="openLightbox(this)">
-                              <img src="<?= BASEURL ?>/img/gallery/<?= $img['filename']; ?>" class="gallery-image">
-                          </div>
-                      </div>
-                  <?php endforeach; ?>
-              </div>
+          <div class="gallery-masonry-wrapper">
+            <div class="gallery-columns">
+              <?php foreach ($data['gallery'] as $img): ?>
+                  <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="<?= BASEURL ?>/img/gallery/<?= $img['fileName']; ?>" alt="Gallery Photo" class="gallery-img-natural">
+                  </div>
+              <?php endforeach; ?>
+            </div>
           </div>
       </div>
       <div id="lightbox-overlay" class="fixed inset-0 z-[10000] hidden bg-black/90 items-center justify-center p-4">
         <button onclick="closeLightbox()" class="absolute top-5 right-5 text-white text-4xl">&times;</button>
         <img id="lightbox-img" src="" class="max-w-full max-height-screen shadow-2xl">
       </div> 
+    </section>
+
+    <section id="media-sharing" class="py-20 bg-stone-50" style="<?= empty($data['share']) ? 'display: none;' : '' ?>">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="text-center mb-10">
+                <h2 class="font-wedding text-4xl text-gold mb-2">Dokumentasi Acara</h2>
+                <p class="text-stone-500 italic">Silakan akses folder di bawah ini untuk melihat atau mengunduh momen kebersamaan kita</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <?php foreach ($data['share'] as $share): ?>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-100 flex items-center justify-between hover:border-gold transition-all group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center text-gold text-xl group-hover:bg-gold group-hover:text-white transition-colors">
+                                <i class="bi bi-folder2-open"></i>
+                            </div>
+                            <div>
+                                <h6 class="font-bold text-stone-800 mb-0"><?= $share['fileName']; ?></h6>
+                                <p class="text-[10px] uppercase tracking-widest text-stone-400">Google Drive Folder</p>
+                            </div>
+                        </div>
+                        <a href="<?= $share['fileLink']; ?>" 
+                          target="_blank" 
+                          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-stone-100 text-stone-600 hover:bg-gold hover:text-white transition-all">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </section>
 
     <section id="envelope" class="py-24 bg-stone-900 text-white relative overflow-hidden" style="<?= empty($data['envelope'][0]['company']) ? 'display: none;' : '' ?>">

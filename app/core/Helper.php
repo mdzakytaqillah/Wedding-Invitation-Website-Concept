@@ -59,6 +59,33 @@ class Helper {
         return $date . 'T' . $time . $timeOffset;
     }
 
+    public static function urlvalidate($type, $url) {
+        if (empty($url)) return NULL;
+
+        if ($type === 'YouTube') {
+            $pattern = '/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/';
+        }
+
+        if ($type === 'Google Maps') {
+            $pattern = '/^(https?:\/\/)?(www\.)?(google\.[a-z.]+\/maps\/|maps\.google\.[a-z.]+\/|goo\.gl\/maps\/|maps\.app\.goo\.gl\/|googleusercontent\.com\/maps\.google\.com\/[01]).*$/i';
+        }
+
+        if (preg_match($pattern, $url)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getYouTubeID($url) {
+        $pattern = '/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i';
+
+        if (preg_match($pattern, $url, $match)) {
+            return $match[1]; 
+        }
+        return null;
+    }
+
     public static function urlnormalize($url) {
         if (!empty($url)) {
             if (strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0) {

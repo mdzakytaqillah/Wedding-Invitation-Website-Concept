@@ -72,14 +72,34 @@ class Console extends Controller {
             exit;
         }
         $data['title'] = 'Media';
+        $event = $this->model('event_model')->getEvent();
+        if(!empty($event)){
+            $data['eventID'] = $event['eventID'];
+        } else {
+            if($_SESSION['roleRank'] > 1){
+                Flasher::setFlash('Data acara belum dimuat, hubungi pengelola', 'warning');
+                header('Location: ' . BASEURL . '/console');
+                exit;
+            }else if($_SESSION['roleRank'] <= 1) {
+                Flasher::setFlash('Anda harus memuat data acara terlebih dahulu', 'warning');
+                header('Location: ' . BASEURL . '/console/event');
+                exit;
+            }
+        }
         $data['cover'] = $this->model('media_model')->getCoverPage();
-        $data['media'] = $this->model('media_model')->getMedia();
+        $data['coverpath'] = !empty($data['cover']['fileName']) && file_exists('img/gallery/' . $data['cover']['fileName']) ? BASEURL . '/img/gallery/' . $data['cover']['fileName'] : 'https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+        $data['gallery'] = $this->model('media_model')->getGallery();
+        $data['youtube'] = $this->model('media_model')->getYouTube();
+        if(!empty($data['youtube'])){
+            $data['YTvideoID'] = Helper::getYouTubeID($data['youtube']['fileLink']);
+        }
+        $data['share'] = $this->model('media_model')->getMediaSharing();
         $this->view('frame/header', $data);
         $this->view('media/index', $data);
         $this->view('frame/footer', $data);
     }
 
-    public function inputcover(){
+    public function gallery(){
         if(!isset($_SESSION['login'])){
             Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
             header('Location: ' . BASEURL . '/console/login');
@@ -90,8 +110,25 @@ class Console extends Controller {
             header('Location: ' . BASEURL . '/console');
             exit;
         }
-        $data['title'] = 'Input Cover';
-        $data['cover'] = $this->model('media_model')->getCoverPage();
+        $data['title'] = 'Gallery';
+        $data['gallery'] = $this->model('media_model')->getGallery();
+        $this->view('frame/header', $data);
+        $this->view('media/gallery', $data);
+        $this->view('frame/footer', $data);
+    }
+
+    public function inputgallery(){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengelola media', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        $data['title'] = 'Input Gallery';
         $event = $this->model('event_model')->getEvent();
         if(empty($event)){
             if($_SESSION['roleRank'] > 1){
@@ -107,7 +144,40 @@ class Console extends Controller {
         }
         $data['eventID'] = $event['eventID'];
         $this->view('frame/header', $data);
-        $this->view('media/inputcover', $data);
+        $this->view('media/inputgallery', $data);
+        $this->view('frame/footer', $data);
+    }
+
+    public function inputshare(){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengelola media', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        $data['title'] = 'Input Media Sharing';
+        $data['groups'] = $this->model('guest_model')->getGroupList();
+        $data['guests'] = $this->model('guest_model')->getTamuWithGroupName();
+        $event = $this->model('event_model')->getEvent();
+        if(empty($event)){
+            if($_SESSION['roleRank'] > 1){
+                Flasher::setFlash('Data acara belum dimuat, hubungi pengelola', 'warning');
+                header('Location: ' . BASEURL . '/console');
+                exit;
+            }else if($_SESSION['roleRank'] <= 1) {
+                Flasher::setFlash('Anda harus memuat data acara terlebih dahulu', 'warning');
+                header('Location: ' . BASEURL . '/console/event');
+                exit;
+            }
+            exit;
+        }
+        $data['eventID'] = $event['eventID'];
+        $this->view('frame/header', $data);
+        $this->view('media/inputshare', $data);
         $this->view('frame/footer', $data);
     }
     # END Media Console Page
@@ -591,12 +661,167 @@ class Console extends Controller {
             exit;
         }
         if($_SESSION['roleRank'] > 1){
-            Flasher::setFlash('Anda tidak memiliki akses untuk mengubah cover page', 'warning');
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengatur cover page', 'warning');
             header('Location: ' . BASEURL . '/console');
             exit;
         }
         if($this->model('media_model')->setCoverPage($_POST, $_FILES) > 0){
-            Flasher::setFlash('Cover page berhasil diubah', 'success');
+            Flasher::setFlash('Cover page berhasil diunggah', 'success');
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }else{
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }
+    }
+
+    public function resetcover(){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengatur cover page', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        if($this->model('media_model')->resetCoverPage() > 0){
+            Flasher::setFlash('Cover page berhasil direset', 'success');
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }else{
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }
+    }
+
+    
+
+    public function newgallery(){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengelola gallery', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        if($this->model('media_model')->setGallery($_POST, $_FILES) > 0){
+            Flasher::setFlash('Gallery berhasil ditambahkan', 'success');
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }else{
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }
+    }
+
+    public function deletegallery($id){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengelola gallery', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        if($this->model('media_model')->removeGallery($id) > 0){
+            Flasher::setFlash('Gallery berhasil dihapus', 'success');
+            header('Location: ' . BASEURL . '/console/gallery');
+            exit;
+        }else{
+            header('Location: ' . BASEURL . '/console/gallery');
+            exit;
+        }
+    }
+
+    public function updateyoutube(){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengelola media', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        if(Helper::urlvalidate('YouTube', $_POST['youtube_url'])){
+            if($this->model('media_model')->updateYouTube($_POST) > 0){
+                Flasher::setFlash('Link YouTube berhasil diperbarui', 'success');
+                header('Location: ' . BASEURL . '/console/media');
+                exit;
+            }else{
+                header('Location: ' . BASEURL . '/console/media');
+                exit;
+            }
+        }else{
+            Flasher::setFlash('Format link YouTube tidak valid. Pastikan link berasal dari youtube.com atau youtu.be.', 'danger');
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }
+    }
+
+    public function resetyoutube(){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengelola media', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        if($this->model('media_model')->resetYouTubeLink() > 0){
+            Flasher::setFlash('Video YouTube berhasil direset', 'success');
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }else{
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }
+    }
+
+    public function newsharing(){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengelola media', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        if($this->model('media_model')->setMediaSharing($_POST) > 0){
+            Flasher::setFlash('Media sharing berhasil ditambahkan', 'success');
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }else{
+            header('Location: ' . BASEURL . '/console/media');
+            exit;
+        }
+    }
+
+    public function deletemedia($id){
+        if(!isset($_SESSION['login'])){
+            Flasher::setFlash('Anda harus login terlebih dahulu', 'warning');
+            header('Location: ' . BASEURL . '/console/login');
+            exit;
+        }
+        if($_SESSION['roleRank'] > 1){
+            Flasher::setFlash('Anda tidak memiliki akses untuk mengelola media', 'warning');
+            header('Location: ' . BASEURL . '/console');
+            exit;
+        }
+        if($this->model('media_model')->delete($id) > 0){
+            Flasher::setFlash('Media berhasil dihapus', 'success');
             header('Location: ' . BASEURL . '/console/media');
             exit;
         }else{

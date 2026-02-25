@@ -53,7 +53,8 @@ class guest_model {
     }
 
     public function getTamuByGuestCode($code){
-        $this->db->query('SELECT * FROM ' . $this->tamu . ' WHERE guestCode = :code');
+        $query = 'SELECT t.*, g.groupID, g.groupName FROM ' . $this->tamu . ' t LEFT JOIN ' . $this->group . ' g ON t.groupID = g.groupID WHERE t.guestCode = :code';
+        $this->db->query($query);
         $this->db->bind('code', $code);
         return $this->db->resultSingle();
     }

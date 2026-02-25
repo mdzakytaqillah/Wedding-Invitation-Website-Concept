@@ -9,12 +9,19 @@ class Home extends Controller {
                 $data['guestPrefix'] = $guest['prefix'];
                 $data['guestName'] = $guest['guestName'];
                 $data['guestSuffix'] = $guest['suffix'];
+                $data['share'] = $this->model('media_model')->getMediaAccess($guest['groupID'], $guest['guestID']);
             } else {
                 header('Location: ' . BASEURL);
                 exit;
             }
         }
         $data['event'] = $this->model('event_model')->getEvent();
+        $cover = $this->model('media_model')->getCoverPage();
+        $data['coverpath'] = !empty($cover['fileName']) && file_exists('img/gallery/' . $cover['fileName']) ? BASEURL . '/img/gallery/' . $cover['fileName'] : 'https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+        $youtube = $this->model('media_model')->getYouTube();
+        if(!empty($youtube)){
+            $data['YTvideoID'] = Helper::getYouTubeID($youtube['fileLink']);
+        }
         $data['story'] = $this->model('event_model')->getStory();
         $data['envelope'] = $this->model('event_model')->getEnvelope();
         $data['tanggalakad'] = !empty($data['event']['marriageDate']) ? Helper::tanggalText($data['event']['marriageDate']) : null;
@@ -27,6 +34,7 @@ class Home extends Controller {
         $locresepsi = !empty($data['event']['receptionGMaps']) ? $data['event']['receptionGMaps'] : null;
         $data['locakad'] = Helper::urlnormalize($locakad);
         $data['locresepsi'] = Helper::urlnormalize($locresepsi);
+        $data['gallery'] = $this->model('media_model')->getGallery();
         $data['ucapan'] = $this->model('message_model')->displayMessage();
         if(!empty($data['event'])){
             $this->view('home/index', $data);
