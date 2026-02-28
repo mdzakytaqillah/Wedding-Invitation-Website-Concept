@@ -190,6 +190,42 @@
       </div>
     </section>
 
+    <section id="mempelai" class="py-20 bg-stone-50" style="<?= empty($data['event']['malePhoto']) || empty($data['event']['femalePhoto']) ? 'display: none;' : '' ?>">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="font-wedding text-5xl text-gold mb-12">Mempelai</h2>
+            
+            <div class="flex flex-wrap justify-center gap-12 lg:gap-24">
+                <div class="w-full md:w-1/3" data-aos="fade-right">
+                    <img src="<?= BASEURL ?>/img/gallery/<?= $data['event']['malePhoto']; ?>" 
+                        class="w-48 h-48 mx-auto rounded-full object-cover border-4 border-gold p-1 mb-4 shadow-lg">
+                    <h3 class="font-wedding text-4xl mb-2"><?= $data['event']['maleFullname']; ?></h3>
+                    <p style="<?= empty($data['event']['maleFather']) && empty($data['event']['maleMother']) ? 'display: none;' : '' ?>" class="text-stone-600 mb-4">
+                        Putra dari <span style="<?= empty($data['event']['maleFather']) ? 'display: none;' : '' ?>">Bapak <?= $data['event']['maleFather']; ?></span><span style="<?= empty($data['event']['maleFather']) || empty($data['event']['maleMother'])  ? 'display: none;' : '' ?>"><br> 
+                        & </span><span style="<?= empty($data['event']['maleMother']) ? 'display: none;' : '' ?>">Ibu <?= $data['event']['maleMother']; ?></span>
+                    </p>
+                    <a style="<?= empty($data['event']['maleInstagram']) ? 'display: none;' : '' ?>" href="https://instagram.com/<?= $data['event']['maleInstagram']; ?>" target="_blank" class="text-gold text-2xl">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center text-gold font-wedding text-6xl">&</div>
+
+                <div class="w-full md:w-1/3" data-aos="fade-left">
+                    <img src="<?= BASEURL ?>/img/gallery/<?= $data['event']['femalePhoto']; ?>" 
+                        class="w-48 h-48 mx-auto rounded-full object-cover border-4 border-gold p-1 mb-4 shadow-lg">
+                    <h3 class="font-wedding text-4xl mb-2"><?= $data['event']['femaleFullname']; ?></h3>
+                    <p style="<?= empty($data['event']['femaleFather']) && empty($data['event']['femaleMother']) ? 'display: none;' : '' ?>" class="text-stone-600 mb-4">
+                        Putri dari <span style="<?= empty($data['event']['femaleFather']) ? 'display: none;' : '' ?>">Bapak <?= $data['event']['femaleFather']; ?></span><span style="<?= empty($data['event']['femaleFather']) || empty($data['event']['femaleMother'])  ? 'display: none;' : '' ?>"><br> 
+                        & </span><span style="<?= empty($data['event']['femaleMother']) ? 'display: none;' : '' ?>">Ibu <?= $data['event']['femaleMother']; ?></span>
+                    </p>
+                    <a style="<?= empty($data['event']['femaleInstagram']) ? 'display: none;' : '' ?>" href="https://instagram.com/<?= $data['event']['femaleInstagram']; ?>" target="_blank" class="text-gold text-2xl">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="video-story" class="py-20 bg-white" style="<?= empty($data['YTvideoID']) ? 'display: none;' : '' ?>">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto shadow-2xl rounded-2xl overflow-hidden border-8 border-white">

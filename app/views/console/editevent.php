@@ -7,39 +7,97 @@
     <form action="<?= BASEURL; ?>/console/editEvent" method="post" enctype="multipart/form-data">
         <div class="container-fluid" style="padding-bottom: 90px;">
           <input type="hidden" name="eventID" value="<?= $data['event']['eventID']; ?>">
-          <div class="row">
-              <div class="col-md">
-                  <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="maleName" name="maleName" placeholder="Nama Panggilan Pria" 
-                            value="<?= $data['event']['maleName']; ?>" required>
-                      <label for="maleName">Nama Panggilan Mempelai Pria</label>
-                  </div>
-              </div>
-              <div class="col-md">
-                  <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="maleFullname" name="maleFullname" placeholder="Nama Lengkap Pria" 
-                            value="<?= $data['event']['maleFullname']; ?>" required>
-                      <label for="maleFullname">Nama Lengkap Mempelai Pria</label>
-                  </div>
-              </div>
-          </div>
+          <div class="row mt-4">
+                <h5 class="fw-bold mb-3 text-gold"><i class="bi bi-gender-male me-2"></i>Detail Mempelai Pria</h5>
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="maleName" name="maleName" placeholder="Nama Panggilan Pria" 
+                                    value="<?= $data['event']['maleName']; ?>" required>
+                            <label for="maleName">Nama Panggilan Mempelai Pria</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="maleFullname" name="maleFullname" placeholder="Nama Lengkap Pria" 
+                                    value="<?= $data['event']['maleFullname']; ?>" required>
+                            <label for="maleFullname">Nama Lengkap Mempelai Pria</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3 text-center">
+                        <label class="small fw-bold d-block mb-2">Foto Pria</label>
+                        <input type="file" name="malePhoto" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="maleInstagram" placeholder="Instagram" value="<?= $data['event']['maleInstagram']; ?>">
+                            <label>Username Instagram (tanpa @)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="maleFather" placeholder="Nama Ayah" value="<?= $data['event']['maleFather']; ?>">
+                            <label>Nama Ayah Pria</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="maleMother" placeholder="Nama Ibu" value="<?= $data['event']['maleMother']; ?>">
+                            <label>Nama Ibu Pria</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-          <div class="row">
-              <div class="col-md">
-                  <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="femaleName" name="femaleName" placeholder="Nama Panggilan Wanita" 
-                            value="<?= $data['event']['femaleName']; ?>" required>
-                      <label for="femaleName">Nama Panggilan Mempelai Wanita</label>
-                  </div>
-              </div>
-              <div class="col-md">
-                  <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="femaleFullname" name="femaleFullname" placeholder="Nama Lengkap Wanita" 
-                            value="<?= $data['event']['femaleFullname']; ?>" required>
-                      <label for="femaleFullname">Nama Lengkap Mempelai Wanita</label>
-                  </div>
-              </div>
-          </div>
+            <hr class="my-4 border-gold opacity-25">
+
+            <div class="row">
+                <h5 class="fw-bold mb-3 text-gold"><i class="bi bi-gender-female me-2"></i>Detail Mempelai Wanita</h5>
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="femaleName" name="femaleName" placeholder="Nama Panggilan Wanita" 
+                                    value="<?= $data['event']['femaleName']; ?>" required>
+                            <label for="femaleName">Nama Panggilan Mempelai Wanita</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="femaleFullname" name="femaleFullname" placeholder="Nama Lengkap Wanita" 
+                                    value="<?= $data['event']['femaleFullname']; ?>" required>
+                            <label for="femaleFullname">Nama Lengkap Mempelai Wanita</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3 text-center">
+                        <label class="small fw-bold d-block mb-2">Foto Wanita</label>
+                        <input type="file" name="femalePhoto" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="femaleInstagram" placeholder="Instagram" value="<?= $data['event']['femaleInstagram']; ?>">
+                            <label>Username Instagram (tanpa @)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="femaleFather" placeholder="Nama Ayah" value="<?= $data['event']['femaleFather']; ?>">
+                            <label>Nama Ayah Wanita</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="femaleMother" placeholder="Nama Ibu" value="<?= $data['event']['femaleMother']; ?>">
+                            <label>Nama Ibu Wanita</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4 border-gold opacity-25">
 
           <div class="row">
             <div class="col-md-6">

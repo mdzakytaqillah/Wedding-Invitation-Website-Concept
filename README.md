@@ -12,7 +12,7 @@ Website ini adalah platform undangan pernikahan digital berbasis web yang diranc
 * **Media Sharing Terkontrol**: Berbagi folder Google Drive dengan sistem hak akses yang spesifik per tamu atau per grup.
 
 ### 2. Konten Undangan
-* **Profil Mempelai**: (COMING SOON) Informasi lengkap meliputi nama panggilan, nama lengkap, foto, akun Instagram, hingga nama orang tua.
+* **Profil Mempelai**: Informasi lengkap meliputi nama panggilan, nama lengkap, foto, akun Instagram, hingga nama orang tua.
 * **Detail Acara**: Informasi tanggal, jam, zona waktu (WIB/WITA/WIT), dan lokasi untuk prosesi akad dan resepsi.
 * **Media**: Menampilkan video YouTube dan galeri foto dari mempelai.
 * **Love Story**: Fitur cerita perjalanan cinta dinamis dari mempelai.

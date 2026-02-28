@@ -413,7 +413,21 @@ class Console extends Controller {
                 $_POST['envelopeNumber'][$key] = (string)$cleanNumber;
             }
         }
-        if($this->model('event_model')->newEvent($_POST) > 0){
+        if(!empty($_POST['marriageGMaps'])){
+            if(Helper::urlvalidate('Google Maps', $_POST['marriageGMaps']) === false){
+                Flasher::setFlash('Format link Google Maps lokasi Akad Nikah tidak valid. Pastikan link berasal dari Google Maps.', 'danger');
+                header('Location: ' . BASEURL . '/console/event');
+                exit;
+            }
+        }
+        if(!empty($_POST['receptionGMaps'])){
+            if(Helper::urlvalidate('Google Maps', $_POST['receptionGMaps']) === false){
+                Flasher::setFlash('Format link Google Maps lokasi Resepsi tidak valid. Pastikan link berasal dari Google Maps.', 'danger');
+                header('Location: ' . BASEURL . '/console/event');
+                exit;
+            }
+        }
+        if($this->model('event_model')->newEvent($_POST, $_FILES) > 0){
             Flasher::setFlash('Data acara berhasil disimpan', 'success');
             if(isset($_SESSION['formtemp'])){
                 $_SESSION['formtemp'] = '';
@@ -446,7 +460,21 @@ class Console extends Controller {
                 $_POST['envelopeNumber'][$key] = (string)$cleanNumber;
             }
         }
-        if($this->model('event_model')->editEvent($_POST) > 0){
+        if(!empty($_POST['marriageGMaps'])){
+            if(Helper::urlvalidate('Google Maps', $_POST['marriageGMaps']) === false){
+                Flasher::setFlash('Format link Google Maps lokasi Akad Nikah tidak valid. Pastikan link berasal dari Google Maps.', 'danger');
+                header('Location: ' . BASEURL . '/console/event');
+                exit;
+            }
+        }
+        if(!empty($_POST['receptionGMaps'])){
+            if(Helper::urlvalidate('Google Maps', $_POST['receptionGMaps']) === false){
+                Flasher::setFlash('Format link Google Maps lokasi Resepsi tidak valid. Pastikan link berasal dari Google Maps.', 'danger');
+                header('Location: ' . BASEURL . '/console/event');
+                exit;
+            }
+        }
+        if($this->model('event_model')->editEvent($_POST, $_FILES) > 0){
             Flasher::setFlash('Data acara berhasil diubah', 'success');
             if(isset($_SESSION['formtemp'])){
                 $_SESSION['formtemp'] = '';
